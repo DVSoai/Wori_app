@@ -50,7 +50,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     emit(ContactLoading());
     try {
       final conversationId = await checkOrCreateConversationUseCase(contactId: event.contactId);
-      emit(ConversationReady(conversationId : conversationId, contactName : event.contactName));
+      emit(ConversationReady(conversationId : conversationId, contact : event.contact));
     } catch (e) {
       debugPrint(e.toString());
       emit(ContactError(e.toString()));

@@ -5,11 +5,13 @@ class ContactModel extends ContactEntity {
     required String id,
     required String username,
     required String email,
+    required String profileImage,
 
   }) : super(
           id: id,
           username: username,
           email: email,
+    profileImage: profileImage,
         );
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
@@ -17,15 +19,10 @@ class ContactModel extends ContactEntity {
       id: json['contact_id'],
       username: json['username'],
       email: json['email'],
+      profileImage: json['profile_image'] ?? 'https://cellphones.com.vn/sforum/wp-content/uploads/2024/02/anh-avatar-cute-58.jpg',
 
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'contact_id': id,
-      'username': username,
-      'email': email,
-    };
-  }
+
 }

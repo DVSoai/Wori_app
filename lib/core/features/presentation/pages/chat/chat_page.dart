@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:wori_app/core/constants/app_assets.dart';
 import 'package:wori_app/core/constants/padding.dart';
+import 'package:wori_app/core/features/domain/entities/conversation/conversation_entity.dart';
 import 'package:wori_app/core/features/presentation/bloc/chat/chat_event.dart';
 
 import '../../../../constants/size_box.dart';
@@ -17,7 +18,8 @@ import '../../bloc/chat/chat_state.dart';
 class ChatPage extends StatefulWidget {
   final String conversationId;
   final String mate;
-  const ChatPage({super.key, required this.conversationId, required this.mate});
+  final String participantImage;
+  const ChatPage({super.key, required this.conversationId, required this.mate, required this.participantImage});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -72,13 +74,13 @@ class _ChatPageState extends State<ChatPage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CircleAvatar(
+             CircleAvatar(
               radius: 20,
-              backgroundImage: AssetImage(AppAssets.avatar),
+              backgroundImage: NetworkImage(widget.participantImage),
             ),
             const SizedBox(width: 10),
             Text(
-              widget.mate,
+             " ${widget.mate}",
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
@@ -125,21 +127,6 @@ class _ChatPageState extends State<ChatPage> {
                 }
               },
             ),
-          //     child: ListView(
-          //   padding: PaddingConstants.padAll20,
-          //   children: [
-          //     _buildReceivedMessage(context, 'Hello'),
-          //     _buildReceivedMessage(context, 'How are you?'),
-          //     _buildReceivedMessage(context, 'I am fine'),
-          //     _buildReceivedMessage(context, 'What about you?'),
-          //     _buildReceivedMessage(context, 'I am also fine'),
-          //     _buildReceivedMessage(context, 'Thank you'),
-          //     _buildReceivedMessage(context, 'Goodbye'),
-          //     _buildSendMessage(context, 'Hello'),
-          //     _buildSendMessage(context, 'How are you?'),
-          //     _buildSendMessage(context, 'I am fine'),
-          //   ],
-          // )
           ),
 
           _buildMessageInput(context),

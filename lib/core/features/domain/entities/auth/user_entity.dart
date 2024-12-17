@@ -4,6 +4,7 @@ class UserEntity {
   final String username;
   final String password;
   final String token;
+  final String profileImage;
 
   UserEntity({
     required this.id,
@@ -11,6 +12,7 @@ class UserEntity {
     required this.username,
     required this.password,
      this.token = '',
+    required this.profileImage,
 
   });
 
@@ -21,6 +23,7 @@ class UserEntity {
       username: map['username'],
       password: map['password'],
       token: map['token'],
+      profileImage: map['profile_image'],
 
 
     );
@@ -33,6 +36,7 @@ class UserEntity {
       'username': username,
       'password': password,
       'token': token,
+      'profile_image': profileImage,
     };
   }
 }

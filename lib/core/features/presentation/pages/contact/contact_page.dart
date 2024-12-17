@@ -42,7 +42,8 @@ class _ContactPageState extends State<ContactPage> {
                 MaterialPageRoute(
                     builder: (context) => ChatPage(
                           conversationId: state.conversationId,
-                          mate: state.contactName,
+                          mate: state.contact.username,
+                          participantImage: state.contact.profileImage!,
                         )));
             if(res == null){
               contactsBloc.add(FetchContacts());
@@ -59,11 +60,14 @@ class _ContactPageState extends State<ContactPage> {
                   itemBuilder: (context, index) {
                     final contact = state.contacts[index];
                     return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(contact.profileImage!),
+                      ),
                       title: Text(contact.username, style: Theme.of(context).textTheme.bodyLarge,),
                       subtitle: Text(contact.email,style: Theme.of(context).textTheme.bodyLarge),
                       onTap: (){
                         BlocProvider.of<ContactBloc>(context).add(
-                          CheckOrCreateConversation(contactId: contact.id, contactName: contact.username),
+                          CheckOrCreateConversation(contactId: contact.id, contact: contact),
                         );
                       },
                     );

@@ -22,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
     emit(AuthLoading());
     try{
       final user = await registerUseCase.call(event.username, event.email, event.password);
+      debugPrint('user: $user');
       emit(AuthSuccess(message: 'Register successful'));
     }catch(e){
       debugPrint(e.toString());

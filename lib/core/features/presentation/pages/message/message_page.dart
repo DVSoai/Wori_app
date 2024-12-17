@@ -89,12 +89,15 @@ class _MessagePageState extends State<MessagePage> {
                                 MaterialPageRoute(
                                     builder: (context) => ChatPage(
                                         conversationId: conversation.id,
-                                        mate: conversation.participantName)));
+                                        mate: conversation.participantName,
+                                        participantImage: conversation.participantImage!
+                                    )));
                           },
                           child: _buildMessageTitle(
                               context,
                               conversation.lastMessage,
                               conversation.participantName,
+                              conversation.participantImage!,
                               conversation.lastMessageTime.toString()),
                         );
                       },
@@ -121,12 +124,12 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   Widget _buildMessageTitle(
-      BuildContext context, String email, String name, String time) {
+      BuildContext context, String email, String name, String image, String time) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      leading: const CircleAvatar(
+      leading:  CircleAvatar(
         radius: 30,
-        backgroundImage: AssetImage(AppAssets.avatar),
+        backgroundImage: NetworkImage(image),
       ),
       title: Text(name, style: Theme.of(context).textTheme.titleMedium),
       subtitle: Text(

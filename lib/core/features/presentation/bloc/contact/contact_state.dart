@@ -1,4 +1,5 @@
 import 'package:wori_app/core/features/domain/entities/contacts/contact_entity.dart';
+import 'package:wori_app/core/features/domain/entities/conversation/conversation_entity.dart';
 
 
 abstract class ContactState{}
@@ -18,7 +19,7 @@ class ContactError extends ContactState{
 class ContactAdded extends ContactState{}
 class ConversationReady extends ContactState{
   final String conversationId;
-  final String contactName;
+  final ContactEntity contact;
 
-  ConversationReady({required this.conversationId, required this.contactName});
+  ConversationReady({required this.conversationId, required this.contact});
 }

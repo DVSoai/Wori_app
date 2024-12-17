@@ -34,7 +34,9 @@ class _RegisterPageState extends State<RegisterPage> {
     BlocProvider.of<AuthBloc>(context).add(
         RegisterEvent(username: _usernameController.text.trim(),
             email: _emailController.text.trim(),
-            password: _passwordController.text.trim())
+            password: _passwordController.text.trim()
+
+        )
     );
   }
 
