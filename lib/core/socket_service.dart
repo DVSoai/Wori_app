@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import 'base/base_url.dart';
 class SocketService {
   static final SocketService _instance = SocketService._internal();
   factory SocketService() => _instance;
@@ -15,7 +17,7 @@ class SocketService {
     Future<void>initSocket() async {
       String? token = await _storage.read(key: 'token') ?? '';
 
-      _socket = IO.io('http://192.168.2.7:3000',IO.OptionBuilder()
+      _socket = IO.io(EnvTestConstants.API_URL,IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
           .setExtraHeaders({'Authorization': 'Bearer $token'})

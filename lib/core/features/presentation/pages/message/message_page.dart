@@ -36,7 +36,7 @@ class _MessagePageState extends State<MessagePage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         toolbarHeight: 70,
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+        actions: [IconButton(onPressed: () {}, icon: const  Icon(Icons.search))],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,8 +114,8 @@ class _MessagePageState extends State<MessagePage> {
         onPressed: () {
           Navigator.pushNamed(context, '/contactPage' );
         },
-        child: const Icon(Icons.contacts),
         backgroundColor: DefaultColors.buttonColor,
+        child: const Icon(Icons.contacts),
       ),
     );
   }

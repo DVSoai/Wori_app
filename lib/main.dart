@@ -25,6 +25,7 @@ import 'core/features/domain/usecase/contacts/add_contact_use_case.dart';
 import 'core/features/domain/usecase/contacts/fetch_contact_use_case.dart';
 import 'core/features/domain/usecase/conversation/check_or_create_conversation_use_case.dart';
 import 'core/features/domain/usecase/conversation/fet_conversation_use_case.dart';
+import 'core/features/domain/usecase/message/fetch_daily_question_use_case.dart';
 import 'core/features/presentation/pages/login/login_page.dart';
 import 'core/features/presentation/pages/register/register_page.dart';
 import 'core/socket_service.dart';
@@ -76,7 +77,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (_) => ChatBloc(
                 fetchMessagesUseCase: FetchMessagesUseCase(
-                    messagesRepository: messageRepository)),
+                    messagesRepository: messageRepository),
+              fetchDailyQuestionUseCase: FetchDailyQuestionUseCase(
+                messagesRepository: messageRepository
+              )
+            ),
           ),
           BlocProvider(
             create: (_) => ContactBloc(

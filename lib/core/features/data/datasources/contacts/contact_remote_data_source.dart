@@ -3,17 +3,18 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../../base/base_url.dart';
 import '../../model/contacts/contact_model.dart';
 import 'package:http/http.dart' as http;
 
 class ContactRemoteDataSource {
-  final String baseUrl = 'http://192.168.2.7:3000';
+
   final _storage = FlutterSecureStorage();
 
   Future<List<ContactModel>> fetchContacts()async {
     String token = await _storage.read(key: 'token') ?? '';
 
-    final response = await http.get(Uri.parse('$baseUrl/contacts'),
+    final response = await http.get(Uri.parse('${EnvTestConstants.API_URL}/contacts'),
     headers: {
       'Authorization': 'Bearer $token',
     }
@@ -32,7 +33,7 @@ class ContactRemoteDataSource {
   Future<void> addContact({required String email}) async {
     final String token = await _storage.read(key: 'token') ?? '';
 
-    final response = await http.post(Uri.parse('$baseUrl/contacts'),
+    final response = await http.post(Uri.parse('${EnvTestConstants.API_URL}/contacts'),
         body: jsonEncode({
           'contactEmail': email,
         }),

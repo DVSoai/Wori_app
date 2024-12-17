@@ -25,13 +25,15 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   String userId = '';
+  String botAiId = '00000000-0000-0000-0000-000000000000';
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<ChatBloc>(context).add(LoadMessagesEvent(widget.conversationId));
+    // BlocProvider.of<ChatBloc>(context).add(LoadDailyQuestionEvent(widget.conversationId));
     fetchUserId();
   }
 
@@ -103,10 +105,14 @@ class _ChatPageState extends State<ChatPage> {
                     itemBuilder: (context, index){
                       final message = state.messages[index];
                       final isSendMessage = message.senderId == userId;
+                      final isDailyQuestion = message.senderId == botAiId;
 
                      if(isSendMessage){
                        return _buildSendMessage(context, message.content);
-                     } else {
+                     }  else if(isDailyQuestion){
+                       return _buildDailyQuestion(context, message.content);
+                     }
+                     else {
                         return _buildReceivedMessage(context, message.content);
                      }
                     },
@@ -212,6 +218,24 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+  Widget _buildDailyQuestion(BuildContext context, String message) {
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        padding: PaddingConstants.padAll14,
+        decoration: BoxDecoration(
+            color: DefaultColors.dailyQuestionColor,
+            borderRadius: BorderRadius.circular(15)),
+        child: Text(
+          "🧠 Daily Question: $message",
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Colors.white70,
+          ),
+        ),
       ),
     );
   }

@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 
+import '../../../../base/base_url.dart';
 import '../../model/auth/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRemoteDataSource {
   // final String baseUrl = 'http://192.168.2.41:3000/auth';
-  final String baseUrl = 'http://192.168.2.7:3000/auth';
 
 
   // Future<UserModel> login(
@@ -22,7 +22,7 @@ class AuthRemoteDataSource {
 
   Future<UserModel> login(
       {required String email, required String password}) async {
-    final response = await http.post(Uri.parse('$baseUrl/login'), body: jsonEncode({
+    final response = await http.post(Uri.parse('${EnvTestConstants.API_URL}/auth/login'), body: jsonEncode({
       'email': email,
       'password': password
     }), headers: {
@@ -36,7 +36,7 @@ class AuthRemoteDataSource {
       {required String username,
       required String email,
       required String password}) async {
-    final response = await http.post(Uri.parse('$baseUrl/register'), body: jsonEncode({
+    final response = await http.post(Uri.parse('${EnvTestConstants.API_URL}/auth/register'), body: jsonEncode({
       'username': username,
       'email': email,
       'password': password

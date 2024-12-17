@@ -21,6 +21,7 @@ class DefaultColors {
   static const Color messageListPage = Color(0xFF292F3F);
   static const Color buttonColor = Color(0xFF7A8194);
   static const Color primaryColor = Color(0xFF0042A9);
+  static const Color dailyQuestionColor = Colors.blueGrey;
 }
 class AppTheme {
   static ThemeData get darkTheme {
