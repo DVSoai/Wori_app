@@ -23,7 +23,7 @@ class ConversationModel extends ConversationEntity {
       participantName: json['participant_name']?? '',
       participantImage: json['participant_image']?? 'https://cellphones.com.vn/sforum/wp-content/uploads/2024/02/anh-avatar-cute-58.jpg',
       lastMessage: json['last_message']?? '',
-      lastMessageTime: json['last_message_time'] ? DateTime.parse(json['last_message_time']) : DateTime.now(),
+      lastMessageTime:  DateTime.parse(json['last_message_time']),
 
     );
   }
