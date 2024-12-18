@@ -45,4 +45,24 @@ class ContactRemoteDataSource {
       throw Exception('Failed to add contact. Status code: ${response.statusCode}');
     }
   }
+  Future<List<ContactModel>>fetchRecentContacts()async {
+    String token = await _storage.read(key: 'token') ?? '';
+
+    final response = await http.get(Uri.parse('${EnvTestConstants.API_URL}/contacts/recent'),
+        headers: {
+          'Content-Type':'application/json',
+          'Authorization': 'Bearer $token',
+        }
+    );
+    if(response.statusCode == 200){
+      try{
+        List data = jsonDecode(response.body);
+        return data.map((json) => ContactModel.fromJson(json)).toList();
+      }catch(e){
+        throw Exception('Failed to decode JSON: $e');
+      }
+    }else{
+      throw Exception('Failed to load recent contacts Status code: ${response.statusCode}');
+    }
+  }
 }

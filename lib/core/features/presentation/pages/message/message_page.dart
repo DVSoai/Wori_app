@@ -48,21 +48,33 @@ class _MessagePageState extends State<MessagePage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
-          Container(
-            height: 100,
-            padding: const EdgeInsets.all(5),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-              ],
-            ),
-          ),
+        BlocBuilder<ConversationBloc, ConversationState>(
+          builder: (context,state) {
+            if(state is RecentContactLoaded){
+              return ListView.builder(
+                itemCount: state.recentContacts.length,
+                itemBuilder: (context, index){
+                  final recentContact = state.recentContacts[index];
+                  debugPrint('Recent Contact: ${state.recentContacts.length}');
+                  return GestureDetector(
+                    onTap: (){
+                      Navigator.pushNamed(context, '/chatPage', arguments: {
+                        'username': recentContact.username,
+                        'profileImage': recentContact.profileImage
+                      });
+
+                    },
+                    child: _buildRecentContact(context, recentContact.username,recentContact.profileImage!),
+                  );
+                },
+              );
+            }else if (state is ConversationsError) {
+              debugPrint('Error: ${state.message}');
+              return Center(child: Text(state.message));
+            }
+            return const Center(child: Text('No Conversations found'));
+          },
+        ),
           SizedBoxConstants.sizedBoxH10,
           Expanded(
             child: Container(
@@ -146,14 +158,14 @@ class _MessagePageState extends State<MessagePage> {
     );
   }
 
-  Widget _buildRecentContact(BuildContext context, String name) {
+  Widget _buildRecentContact(BuildContext context, String name, String image) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          const CircleAvatar(
+           CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage(AppAssets.avatar),
+            backgroundImage: NetworkImage(image),
           ),
           const SizedBox(height: 5),
           Text(
