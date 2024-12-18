@@ -7,6 +7,6 @@ class FetchConversationUseCase {
   FetchConversationUseCase({required this.repository});
 
   Future<List<ConversationEntity>>call()async {
-    return repository.fetchConversations();
+    return await repository.fetchConversations();
   }
 }

@@ -23,6 +23,7 @@ import 'core/features/data/datasources/conversation/conversations_remote_data_so
 import 'core/features/data/repositories/auth/auth_repository_impl.dart';
 import 'core/features/domain/usecase/contacts/add_contact_use_case.dart';
 import 'core/features/domain/usecase/contacts/fetch_contact_use_case.dart';
+import 'core/features/domain/usecase/contacts/fetch_recent_contact_use_case.dart';
 import 'core/features/domain/usecase/conversation/check_or_create_conversation_use_case.dart';
 import 'core/features/domain/usecase/conversation/fet_conversation_use_case.dart';
 import 'core/features/domain/usecase/message/fetch_daily_question_use_case.dart';
@@ -73,7 +74,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (_) => ConversationBloc(
                   fetchConversationUseCase: FetchConversationUseCase(
-                      repository: conversationsRepository))),
+                      repository: conversationsRepository),
+                  fetchRecentContactUseCase: FetchRecentContactUseCase(
+                      contactsRepository: contactRepository)
+              )),
           BlocProvider(
             create: (_) => ChatBloc(
                 fetchMessagesUseCase: FetchMessagesUseCase(
@@ -92,7 +96,8 @@ class MyApp extends StatelessWidget {
               ),
               checkOrCreateConversationUseCase: CheckOrCreateConversationUseCase(
                 conversationsRepository: conversationsRepository
-              )
+              ),  fetchRecentContactUseCase: FetchRecentContactUseCase(
+                contactsRepository: contactRepository)
             ),
           ),
         ],

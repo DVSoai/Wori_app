@@ -26,7 +26,6 @@ class ConversationModel extends ConversationEntity {
       lastMessageTime: json['last_message_time'] != null && json['last_message_time'] is String
           ? DateTime.tryParse(json['last_message_time']) ?? DateTime.now()
           : DateTime.now(),
-
     );
   }
 }

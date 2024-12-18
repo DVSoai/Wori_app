@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wori_app/core/constants/app_assets.dart';
 import 'package:wori_app/core/constants/size_box.dart';
+import 'package:wori_app/core/features/presentation/bloc/contact/contact_bloc.dart';
+import 'package:wori_app/core/features/presentation/bloc/contact/contact_state.dart';
 import 'package:wori_app/core/features/presentation/pages/chat/chat_page.dart';
 import 'package:wori_app/core/theme.dart';
 
 import '../../../../constants/padding.dart';
+import '../../bloc/contact/contact_event.dart';
 import '../../bloc/conversation/conversation_bloc.dart';
 import '../../bloc/conversation/conversation_event.dart';
 import '../../bloc/conversation/conversation_state.dart';
@@ -22,6 +25,7 @@ class _MessagePageState extends State<MessagePage> {
   void initState() {
     super.initState();
     BlocProvider.of<ConversationBloc>(context).add(FetchConversationsEvent());
+    BlocProvider.of<ContactBloc>(context).add(LoadRecentContact());
   }
 
   @override
@@ -36,7 +40,7 @@ class _MessagePageState extends State<MessagePage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         toolbarHeight: 70,
-        actions: [IconButton(onPressed: () {}, icon: const  Icon(Icons.search))],
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search))],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,21 +52,60 @@ class _MessagePageState extends State<MessagePage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
-          Container(
-            height: 100,
-            padding: const EdgeInsets.all(5),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-                _buildRecentContact(context, 'Marshal Dev'),
-              ],
+          BlocListener<ContactBloc, ContactState>(
+            listener: (context, state) async {
+              final contactsBloc = BlocProvider.of<ContactBloc>(context);
+
+              if (state is ConversationReady) {
+                var res = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChatPage(
+                          conversationId: state.conversationId,
+                          mate: state.contact.username,
+                          participantImage: state.contact.profileImage!,
+                        )));
+                if(res == null){
+                  contactsBloc.add(FetchContacts());
+                  contactsBloc.add(LoadRecentContact());
+                }
+              }
+            },
+            child:   BlocBuilder<ContactBloc, ContactState>(
+              builder: (context, state) {
+                if (state is RecentContactLoaded) {
+                  return SizedBox(
+                    height: 100,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.recentContacts.length,
+                      itemBuilder: (context, index) {
+                        final recentContact = state.recentContacts[index];
+                        return GestureDetector(
+                          onTap: () {
+                            BlocProvider.of<ContactBloc>(context).add(
+                              CheckOrCreateConversation(
+                                  contactId: recentContact.id,
+                                  contact: recentContact),
+                            );
+                          },
+                          child: _buildRecentContact(
+                              context,
+                              recentContact.username,
+                              recentContact.profileImage!),
+                        );
+                      },
+                    ),
+                  );
+                } else if (state is ContactError) {
+                  debugPrint('Error: ${state.message}');
+                  return Center(child: Text(state.message));
+                }
+                return const Center(child: Text('No Conversations found'));
+              },
             ),
           ),
+
           SizedBoxConstants.sizedBoxH10,
           Expanded(
             child: Container(
@@ -90,8 +133,8 @@ class _MessagePageState extends State<MessagePage> {
                                     builder: (context) => ChatPage(
                                         conversationId: conversation.id,
                                         mate: conversation.participantName,
-                                        participantImage: conversation.participantImage!
-                                    )));
+                                        participantImage:
+                                            conversation.participantImage!)));
                           },
                           child: _buildMessageTitle(
                               context,
@@ -114,8 +157,12 @@ class _MessagePageState extends State<MessagePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/contactPage' );
+        onPressed: () async {
+          final contactBloc = BlocProvider.of<ContactBloc>(context);
+          var result = await Navigator.pushNamed(context, '/contactPage');
+          if (result == null) {
+            contactBloc.add(LoadRecentContact());
+          }
         },
         backgroundColor: DefaultColors.buttonColor,
         child: const Icon(Icons.contacts),
@@ -123,11 +170,11 @@ class _MessagePageState extends State<MessagePage> {
     );
   }
 
-  Widget _buildMessageTitle(
-      BuildContext context, String email, String name, String image, String time) {
+  Widget _buildMessageTitle(BuildContext context, String email, String name,
+      String image, String time) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      leading:  CircleAvatar(
+      leading: CircleAvatar(
         radius: 30,
         backgroundImage: NetworkImage(image),
       ),
@@ -146,14 +193,14 @@ class _MessagePageState extends State<MessagePage> {
     );
   }
 
-  Widget _buildRecentContact(BuildContext context, String name) {
+  Widget _buildRecentContact(BuildContext context, String name, String image) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage(AppAssets.avatar),
+            backgroundImage: NetworkImage(image),
           ),
           const SizedBox(height: 5),
           Text(
