@@ -46,17 +46,22 @@ class ContactRemoteDataSource {
     }
   }
   Future<List<ContactModel>>fetchRecentContacts()async {
+    debugPrint('step : -1');
     String token = await _storage.read(key: 'token') ?? '';
 
     final response = await http.get(Uri.parse('${EnvTestConstants.API_URL}/contacts/recent'),
         headers: {
-          'Content-Type':'application/json',
           'Authorization': 'Bearer $token',
         }
     );
-    if(response.statusCode == 200){
+    debugPrint('step : 0');
+    if(response.statusCode == 201){
+      debugPrint('step :1');
       try{
+        debugPrint('step :2');
         List data = jsonDecode(response.body);
+        debugPrint('step :3');
+        debugPrint(data.toList().toString());
         return data.map((json) => ContactModel.fromJson(json)).toList();
       }catch(e){
         throw Exception('Failed to decode JSON: $e');

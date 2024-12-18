@@ -16,7 +16,7 @@ class ConversationBloc extends Bloc<ConversationEvent,ConversationState>{
 
   ConversationBloc({required this.fetchConversationUseCase,required this.fetchRecentContactUseCase}) : super(ConversationsInitial()){
     on<FetchConversationsEvent>(_onFetchConversations);
-    on<LoadRecentContactEvent>(_onFetchRecentContacts);
+    // on<LoadRecentContactEvent>(_onFetchRecentContacts);
     _initializeSocketListeners();
   }
   void _initializeSocketListeners(){
@@ -38,13 +38,14 @@ class ConversationBloc extends Bloc<ConversationEvent,ConversationState>{
   void _onConversationUpdated(data){
     add(FetchConversationsEvent());
   }
-  Future<void>_onFetchRecentContacts(LoadRecentContactEvent event, Emitter<ConversationState> emit)async{
-    emit(ConversationsLoading());
-    try{
-      final recentContacts = await fetchRecentContactUseCase.call();
-      emit(RecentContactLoaded(recentContacts));
-    }catch(e){
-      emit(ConversationsError(e.toString()));
-    }
-  }
+  // Future<void>_onFetchRecentContacts(LoadRecentContactEvent event, Emitter<ConversationState> emit)async{
+  //   emit(ConversationsLoading());
+  //   try{
+  //     debugPrint("Fetching recent contacts vao day");
+  //     final recentContacts = await fetchRecentContactUseCase.call();
+  //     emit(RecentContactLoaded(recentContacts));
+  //   }catch(e){
+  //     emit(ConversationsError(e.toString()));
+  //   }
+  // }
 }

@@ -9,10 +9,10 @@ class ConversationsLoaded extends ConversationState{
   final List<ConversationEntity> conversations;
   ConversationsLoaded( this.conversations);
 }
-class RecentContactLoaded extends ConversationState{
-  final List<ContactEntity> recentContacts;
-  RecentContactLoaded( this.recentContacts);
-}
+// class RecentContactLoaded extends ConversationState{
+//   final List<ContactEntity> recentContacts;
+//   RecentContactLoaded( this.recentContacts);
+// }
 
 class ConversationsError extends ConversationState{
   final String message;

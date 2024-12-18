@@ -96,7 +96,8 @@ class MyApp extends StatelessWidget {
               ),
               checkOrCreateConversationUseCase: CheckOrCreateConversationUseCase(
                 conversationsRepository: conversationsRepository
-              )
+              ),  fetchRecentContactUseCase: FetchRecentContactUseCase(
+                contactsRepository: contactRepository)
             ),
           ),
         ],

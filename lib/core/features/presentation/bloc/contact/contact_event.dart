@@ -19,3 +19,5 @@ class CheckOrCreateConversation extends ContactEvent {
 
   CheckOrCreateConversation({required this.contactId,required this.contact});
 }
+
+class LoadRecentContact extends ContactEvent{}
